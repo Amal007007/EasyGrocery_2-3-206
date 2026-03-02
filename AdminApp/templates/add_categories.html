@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% extends 'dashboard.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add New Categories</h4>
+<!--                    <p class="card-description"> Basic form elements </p>-->
+                    <form class="forms-sample" method="post" action="{% url 'save_categories' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                      <div class="form-group">
+                        <label for="category_name">Category Name</label>
+                        <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Category Name" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="category_description">Description</label>
+                        <textarea class="form-control" id="category_description" name="category_description" placeholder="Description" rows="4" required></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label>Category Image</label>
+                        <input type="file" name="category_image" class="form-control" id="category_image"  required>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+<!--                      <button class="btn btn-dark">Cancel</button>-->
+                    </form>
+                  </div>
+                </div>
+              </div>
+<!--    Form Validation-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.tags == "success" %}
+                    <script>
+                        swal('{{ msg }}', '', 'success')
+                    </script>
+                 {% elif msg.tags == "warning" %}
+                    <script>
+                        swal('{{ msg }}', '', 'warning')
+                    </script>
+                {% elif msg.tags == "error" %}
+                    <script>
+                        swal('{{ msg }}', '', 'error')
+                    </script>
+                {% elif msg.tags == "info" %}
+                    <script>
+                        swal('{{ msg }}', '', 'info')
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% extends 'dashboard.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add Products</h4>
+<!--                    <p class="card-description"> Basic form elements </p>-->
+                    <form class="forms-sample" method="post" action="{% url 'save_product' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+<!--                      <div class="form-group">-->
+<!--                        <label for="exampleInputName1">Category Name</label>-->
+<!--                        <input type="text" name="category_name" class="form-control" id="exampleInputName1" placeholder="Category Name" required>-->
+<!--                      </div>-->
+                    <div class="form-group">
+                      <label for="grocery_categories">Select Grocery Category</label>
+                      <select id="grocery_categories" name="p_category_name" class="form-control" style="width:100%">
+                        <option >Select Category </option>
+                          {% for i in categories %}
+                            <option>{{ i.CategoryName }}</option>
+                          {% endfor %}
+
+                      </select>
+                    </div>
+                       <div class="form-group">
+                        <label for="product_name">Product Name</label>
+                        <input type="text" name="product_name" class="form-control" id="product_name" placeholder="Product Name" required>
+                      </div>
+                     <div class="form-group">
+                        <label for="p_price">Price</label>
+                        <input type="number" name="p_price" class="form-control" id="p_price" placeholder="Price" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="p_description">Description</label>
+                        <textarea class="form-control" id="p_description" name="p_description" placeholder="Description" rows="4" required></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label>Product Image</label>
+                        <input type="file" name="product_image" id="product_image" class="form-control"  required>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+<!--                      <button class="btn btn-dark">Cancel</button>-->
+                    </form>
+                  </div>
+                </div>
+              </div>
+    <!--    Form Validation-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.tags == "success" %}
+                    <script>
+                        swal('{{ msg }}', '', 'success')
+                    </script>
+                 {% elif msg.tags == "warning" %}
+                    <script>
+                        swal('{{ msg }}', '', 'warning')
+                    </script>
+                {% elif msg.tags == "error" %}
+                    <script>
+                        swal('{{ msg }}', '', 'error')
+                    </script>
+                {% elif msg.tags == "info" %}
+                    <script>
+                        swal('{{ msg }}', '', 'info')
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+</body>
+</html>
+{% endblock %}
