@@ -41,7 +41,7 @@
         <div class="humberger__menu__cart">
             <ul>
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="{% url 'cart' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="{% url 'cart' %}" class="active"><i class="fa fa-shopping-bag "></i> <span>3</span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
@@ -293,8 +293,14 @@
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="{{ i.Cart_Quantity }}">
+                                            <div class="">
+                                                <form method="post" action="{% url 'cart_quantity_update' cart_id=i.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" name="action" value="minus" class="btn btn-sm btn-outline-success" style="margin-bottom: 2px;">-</button>
+                                                    <input type="text" value="{{ i.Cart_Quantity }}" readonly style="width: 40px;text-align: center;">
+                                                    <button type="submit" name="action" value="plus" class="btn btn-sm btn-outline-success" style="margin-bottom: 2px; height: 28px;">+</button>
+
+                                                </form>
                                             </div>
                                         </div>
                                     </td>

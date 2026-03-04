@@ -10,6 +10,7 @@ from django.contrib import messages
 def dashboard(request):
     category =CategoryDb.objects.count()
     products = ProductDb.objects.count()
+    services = ServiceDb.objects.count()
     return render(request,"dashboard.html",{'category':category,'products':products})
 
 def add_products(request):
@@ -40,17 +41,22 @@ def admin_login(request):
                 login(request, user)
                 request.session['username'] = uname
                 request.session['password'] = pswd
+                messages.success(request, "Login Successfully")
                 return redirect(dashboard)
             else:
                 print("Invalid Password")
+                messages.error(request, "Invalid Password")
                 return redirect(admin_login_page)
         else:
+            messages.error(request, "Invalid username or password")
+            return redirect(admin_login_page)
             print("User is not found...!")
     return redirect(admin_login_page)
 
 def admin_logout(request):
     del request.session['username']
     del request.session['password']
+    messages.success(request, "Logout Successfully")
     return redirect(admin_login_page)
 def save_categories(request):
     if request.method =="POST":

@@ -8,7 +8,7 @@ urlpatterns=[
     path('add_categories/', views.add_categories, name="add_categories"),
     path('view_products/', views.view_products, name="view_products"),
     path('view_categories/', views.view_categories, name="view_categories"),
-    path('admin_login_page/', views.admin_login_page, name="admin_login_page"),
+    path('', views.admin_login_page, name="admin_login_page"),
     path('admin_login/', views.admin_login, name="admin_login"),
     path('admin_logout/', views.admin_logout, name="admin_logout"),
     path('save_categories/', views.save_categories, name="save_categories"),
@@ -24,6 +24,7 @@ urlpatterns=[
     path('contact_details/', views.contact_details, name="contact_details"),
     path('save_service/', views.save_service, name="save_service"),
     path('delete_service/<int:service_id>/', views.delete_service, name="delete_service"),
+    path('edit_services/<int:service_id>/', views.edit_services, name="edit_services"),
 
 ]
 

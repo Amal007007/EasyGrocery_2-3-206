@@ -92,6 +92,31 @@
         }
 
     </script>
+	  <!--    Form Validation-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.tags == "success" %}
+                    <script>
+                        swal('{{ msg }}', '', 'success')
+                    </script>
+                 {% elif msg.tags == "warning" %}
+                    <script>
+                        swal('{{ msg }}', '', 'warning')
+                    </script>
+                {% elif msg.tags == "error" %}
+                    <script>
+                        swal('{{ msg }}', '', 'error')
+                    </script>
+                {% elif msg.tags == "info" %}
+                    <script>
+                        swal('{{ msg }}', '', 'info')
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
 
 <!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>

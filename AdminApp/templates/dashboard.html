@@ -363,7 +363,7 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="row">
-              <div class="col-12 grid-margin stretch-card">
+               <div class="col-12 grid-margin stretch-card">
                 <div class="card corona-gradient-card">
                   <div class="card-body py-0 px-0 px-sm-3">
                     <div class="row align-items-center">
@@ -372,9 +372,13 @@
                       </div>
                       <div class="col-5 col-sm-7 col-xl-8 p-0">
                         <h4 class="mb-1 mb-sm-0">Welcome to EasyGrocery</h4>
-                        <p class="mb-0 font-weight-normal d-none d-sm-block">Admin Dashboard!</p>
+                        <p class="mb-0 font-weight-normal d-none d-sm-block">Admin Dashboard</p>
                       </div>
-
+                      <div class="col-3 col-sm-2 col-xl-2 pl-0 text-center">
+                        <span>
+                          <a href="{% url 'home' %}" target="_blank" class="btn btn-outline-light btn-rounded get-started-btn">Home</a>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -501,5 +505,31 @@
     <!-- Custom js for this page -->
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
     <!-- End custom js for this page -->
+
+    <!--    Form Validation-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.tags == "success" %}
+                    <script>
+                        swal('{{ msg }}', '', 'success')
+                    </script>
+                 {% elif msg.tags == "warning" %}
+                    <script>
+                        swal('{{ msg }}', '', 'warning')
+                    </script>
+                {% elif msg.tags == "error" %}
+                    <script>
+                        swal('{{ msg }}', '', 'error')
+                    </script>
+                {% elif msg.tags == "info" %}
+                    <script>
+                        swal('{{ msg }}', '', 'info')
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
   </body>
 </html>

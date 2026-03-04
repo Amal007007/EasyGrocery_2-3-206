@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from AdminApp.models import *
 from WebApp.models import *
+import razorpay
 
 
 # Create your views here.
@@ -90,9 +91,11 @@ def save_sign_up(request):
                 obj = UserDb(Username=uname, Email_ID=email, Password=paswd)
                 if UserDb.objects.filter(Username = uname, Password = paswd).exists():
                     print("Username already exists !")
+                    messages.error(request,"Username already exists !")
                     return redirect(sign_up)
                 elif UserDb.objects.filter(Email_ID=email).exists():
                     print("Email id already exists")
+                    messages.error(request,"Email id already exists !")
                     return redirect(sign_up)
                 else:
                     obj.save()
@@ -173,6 +176,20 @@ def add_cart(request):
         return redirect('home')
     return render(request,"Cart.html")
 
+def cart_quantity_update(request,cart_id):
+    if request.method == "POST":
+        action = request.POST.get('action')
+        cart = CartDb.objects.get(id=cart_id)
+
+        if action == "plus":
+            cart.Cart_Quantity +=1
+        elif action == "minus":
+            if cart.Cart_Quantity >1:
+                cart.Cart_Quantity -= 1
+        cart.Cart_TotalPrice = cart.Cart_Quantity * cart.Cart_Price
+        cart.save()
+
+        return redirect('cart')
 
 def checkout(request):
     data = CartDb.objects.filter(Cart_Username=request.session['Username'])
@@ -206,12 +223,63 @@ def add_checkout(request):
                       Address=address, Mobile= mobile, State=state, Pincode=pincode, TotalPrice=final_price)
         obj.save()
         return redirect(payment)
-
 def payment(request):
-    return render(request,"Payment.html")
+    Categories = CategoryDb.objects.all()
+    uname = request.session.get('Username')
 
+    if uname:
+        cart_total = CartDb.objects.filter(Cart_Username=uname).count()
+
+        customer = OrderDb.objects.order_by('-id').first()
+        payy = customer.TotalPrice
+        amount = int(payy * 100)
+        payy_str = str(amount)
+
+        order_currency = "INR"
+        client = razorpay.Client(auth=('rzp_test_0ib0jPwwZ7I1lT', 'VjHNO5zKeKxz8PYe7VnzwxMR'))
+
+        payment = client.order.create({
+            'amount': amount,
+            'currency': order_currency
+        })
+        # payment_success(uname)
+        # messages.success(request, "Payment Successful")
+        return render(request, "Payment.html", {
+            'Categories': Categories,
+            'cart_total': cart_total,
+            'payy_str': payy_str,
+            'payment': payment
+        })
+def payment_success(request):
+    uname = request.session.get('Username')
+
+    if uname:
+        CartDb.objects.filter(Cart_Username=uname).delete()
+
+    messages.success(request, "Payment Successful")
+    return redirect('home')
+# def payment(request):
+#     Categories = CategoryDb.objects.all()
+#     uname = request.session.get('Username')
+#
+#     cart_total = 0
+#     if uname:
+#         cart_total = CartDb.objects.filter(Cart_Username=uname).count()
+#
+#     return render(request, "Payment.html", {
+#         'Categories': Categories,
+#         'cart_total': cart_total
+#     })
+#
+#
+# def payment_success(uname):
+#     CartDb.objects.filter(Cart_Username=uname).delete()
+#
+#     return redirect('all_products')
+#
 def delete_cart_item(request,cart_id):
     cart_data = CartDb.objects.filter(id=cart_id)
     cart_data.delete()
     messages.info(request, "Cart Item Deleted Successfully")
     return redirect('cart')
+
