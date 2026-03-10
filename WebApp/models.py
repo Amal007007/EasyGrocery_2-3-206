@@ -30,3 +30,11 @@ class  OrderDb(models.Model):
     State = models.CharField(max_length=100,null=True,blank=True)
     Pincode = models.CharField(max_length=100,null=True,blank=True)
     TotalPrice = models.FloatField(null=True,blank=True)
+
+class BlogDb(models.Model):
+    Blog_Title = models.CharField(max_length=100,null=True,blank=True)
+    Blog_Description = models.TextField(null=True,blank=True)
+    Blog_Image = models.ImageField(upload_to="Blog_Image",null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    # This field will automatically update every time the object is saved
+    updated_at = models.DateTimeField(auto_now=True)

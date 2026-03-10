@@ -283,3 +283,18 @@ def delete_cart_item(request,cart_id):
     messages.info(request, "Cart Item Deleted Successfully")
     return redirect('cart')
 
+def add_blog(request):
+    return render(request,"add_blog.html")
+
+def save_blog(request):
+    if request.method == "POST":
+        title = request.POST.get('b_name')
+        description = request.POST.get('b_description')
+        b_image = request.FILES['b_img']
+        obj = BlogDb.objects.create(Blog_Title=title, Blog_Description=description, Blog_Image=b_image)
+        obj.save()
+        messages.success(request, "Blog Saved Successfully")
+        return redirect('home')
+    else:
+        messages.error(request, "Contact Admin")
+        return render(request, "add_blog.html")
